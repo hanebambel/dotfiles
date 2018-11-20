@@ -6,16 +6,18 @@ ZSH=$HOME/.oh-my-zsh
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 #ZSH_THEME="agnoster-jan"
-ZSH_THEME="powerlevel9k/powerlevel9k"
-POWERLEVEL9K_MODE='nerdfont-complete'
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(virtualenv context dir dir_writable vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time status root_indicator background_jobs time)
-
+#ZSH_THEME="powerlevel9k/powerlevel9k"
+#POWERLEVEL9K_MODE='nerdfont-complete'
+#POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(virtualenv context dir dir_writable vcs)
+#POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time status root_indicator background_jobs time)
+source .zsh_theme
 
 # Example aliases
-alias zshconfig="mate ~/.zshrc"
-alias ohmyzsh="mate ~/.oh-my-zsh"
-alias ddv="sudo dcfldd" #dd mit statusausgabe
+#alias zshconfig="mate ~/.zshrc"
+#alias ohmyzsh="mate ~/.oh-my-zsh"
+#alias ddv="sudo dcfldd" #dd mit statusausgabe
+#[ -f ".zsh_aliases" ] && source ".zsh_aliases"
+source .zsh_aliases
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"

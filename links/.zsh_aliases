@@ -1,0 +1,4 @@
+alias zshconfig="mate ~/.zshrc"
+alias ohmyzsh="mate ~/.oh-my-zsh"
+alias ddv="sudo dcfldd" #dd mit statusausgabe
+

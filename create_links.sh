@@ -15,7 +15,7 @@ do
     echo $file_name
     
     # If original still exists, backup it..
-    if [ ! -L ~/"$file_name" ]; then
+    if [ ! -L ~/"$file_name" ] && [ -e ~/"$file_name" ]; then
       echo "backing up $file_name.."
       mv ~/"$file_name" $BACKUP_DIR 
     fi
