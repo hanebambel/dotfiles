@@ -11,5 +11,6 @@ Local overrides can be put into ~/.zshrc_local
 
 Backups are made of local config files in ~/jg_dotfiles/backup_originals
 To restore call
+
     zsh ~/jg_dotfiles/rollback.sh
 
