@@ -10,14 +10,14 @@ ZSH=$HOME/.oh-my-zsh
 #POWERLEVEL9K_MODE='nerdfont-complete'
 #POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(virtualenv context dir dir_writable vcs)
 #POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time status root_indicator background_jobs time)
-source .zsh_theme
+source ~/.zsh_theme
 
 # Example aliases
 #alias zshconfig="mate ~/.zshrc"
 #alias ohmyzsh="mate ~/.oh-my-zsh"
 #alias ddv="sudo dcfldd" #dd mit statusausgabe
 #[ -f ".zsh_aliases" ] && source ".zsh_aliases"
-source .zsh_aliases
+source ~/.zsh_aliases
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
@@ -58,3 +58,6 @@ source $ZSH/oh-my-zsh.sh
 export PATH=$PATH:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+#load local overrides
+[ -f "~/.zshrc_local" ] && source ~/.zshrc_local
