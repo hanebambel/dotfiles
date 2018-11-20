@@ -56,4 +56,4 @@ export PATH=$PATH:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 #load local overrides
-test -e "${HOME}/.zshrc_local" && source "${HOME}/.zshrc_local"
+test -e ~/.zshrc_local && source ~/.zshrc_local
