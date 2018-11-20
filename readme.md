@@ -1,7 +1,7 @@
 Preqeqs:
 * git
 * zsh
-* nerd-fonts in Terminal (e.g. [Fura Code](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FiraCode.zip) from  [http://nerdfonts.com](http://nerdfonts.com))
+* nerd-fonts installed and configured in Terminal (e.g. [Fura Code](https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/FiraCode.zip) from  [http://nerdfonts.com](http://nerdfonts.com))
 
 To install:
 
