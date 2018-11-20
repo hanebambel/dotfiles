@@ -5,6 +5,11 @@ Preqeqs:
 
 To install:
 
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/hanebambel/dotfiles/master/bootstrap_zsh.sh)"
+    zsh -c "$(curl -fsSL https://raw.githubusercontent.com/hanebambel/dotfiles/master/bootstrap_zsh.sh)"
 
 Local overrides can be put into ~/.zshrc_local
+
+Backups are made of local config files in ~/jg_dotfiles/backup_originals
+To restore call
+    zsh ~/jg_dotfiles/rollback.sh
+
