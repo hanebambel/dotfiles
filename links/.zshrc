@@ -6,10 +6,6 @@ ZSH=$HOME/.oh-my-zsh
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 #ZSH_THEME="agnoster-jan"
-#ZSH_THEME="powerlevel9k/powerlevel9k"
-#POWERLEVEL9K_MODE='nerdfont-complete'
-#POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(virtualenv context dir dir_writable vcs)
-#POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time status root_indicator background_jobs time)
 source ~/.zsh_theme
 
 # Example aliases
@@ -60,4 +56,4 @@ export PATH=$PATH:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 #load local overrides
-[ -f "~/.zshrc_local" ] && source ~/.zshrc_local
+[[ -f "~/.zshrc_local" ]] && source ~/.zshrc_local
