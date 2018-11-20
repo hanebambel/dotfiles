@@ -3,7 +3,7 @@
 # change basename if path differs
 BASE_NAME=~/jg_dotfiles/links
 
-BACKUP_DIR=backup_originals
+BACKUP_DIR=~/jg_dotfiles/backup_originals
 
 for file in "$BASE_NAME"/.*
 do
@@ -11,6 +11,11 @@ do
   if [[ -f "$file" ]] || [[ -d "$file" ]]; then
     file_name=$(basename $file)
     echo $file_name
+
+    if [[ ! -e $BACKUP_DIR ]]; then
+      echo "creating backup folder..."
+      mkdir $BACKUP_DIR
+    fi
     
     # If original still exists, backup it..
     if [[ ! -L ~/"$file_name" ]] && [[ -e ~/"$file_name" ]]; then
