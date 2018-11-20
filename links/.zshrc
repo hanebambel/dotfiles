@@ -48,12 +48,12 @@ plugins=(git sublime forklift osx brew docker textmate zsh-history-substring-sea
 
 unsetopt AUTO_CD
 
+#load local overrides
+test -e ~/.zshrc_local && source ~/.zshrc_local
+
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 export PATH=$PATH:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
-#load local overrides
-test -e ~/.zshrc_local && source ~/.zshrc_local
