@@ -15,4 +15,4 @@ do
     fi
 done
 
-cp $BACKUP_DIR/* ~
+cp $BACKUP_DIR/.* ~
