@@ -2,3 +2,13 @@ alias zshconfig="mate ~/.zshrc"
 alias ohmyzsh="mate ~/.oh-my-zsh"
 alias ddv="sudo dcfldd" #dd mit statusausgabe
 
+#if exa installed, set aliases
+
+EXA_WHICH=$(which exa)  
+if [ $EXA_WHICH != 'exa not found' ]; then
+  unalias ll
+  alias ll="exa -l"
+  unalias la
+  alias la="exa -lias=name"
+  alias lt="exa -TFlL=2"
+fi
