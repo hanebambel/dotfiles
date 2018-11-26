@@ -23,7 +23,7 @@ if [ "$resp" = 'y' -o "$resp" = 'Y' ] ; then
       fi
       
       # If original still exists, backup it..
-      if [[ ! -L ~/"$file_name" ]] && [[ -e ~/"$file_name" ]]; then
+      if [[ ! ~/"$file_name" -ef "$file" ]]; then
         echo "backing up $file_name.."
         mv ~/"$file_name" $BACKUP_DIR 
       fi 
