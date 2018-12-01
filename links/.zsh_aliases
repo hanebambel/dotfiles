@@ -1,6 +1,7 @@
 alias zshconfig="mate ~/.zshrc"
 alias ohmyzsh="mate ~/.oh-my-zsh"
 alias ddv="sudo dcfldd" #dd mit statusausgabe
+alias getmyip="curl ifconfig.me"
 
 #if exa installed, set aliases
 
