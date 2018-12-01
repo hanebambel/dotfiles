@@ -53,6 +53,9 @@ test -e ~/.zshrc_local && source ~/.zshrc_local
 
 source $ZSH/oh-my-zsh.sh
 
+autoload -U +X bashcompinit && bashcompinit
+test -e /usr/local/etc/bash_completion.d/az && source /usr/local/etc/bash_completion.d/az
+
 # Customize to your needs...
 export PATH=$PATH:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin
 
