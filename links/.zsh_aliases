@@ -2,6 +2,7 @@ alias zshconfig="mate ~/.zshrc"
 alias ohmyzsh="mate ~/.oh-my-zsh"
 alias ddv="sudo dcfldd" #dd mit statusausgabe
 alias getmyip="curl ifconfig.me"
+alias cleandocker="docker ps --filter "status=exited" | awk '{print $1}' | xargs docker rm"
 
 #if exa installed, set aliases
 
