@@ -14,3 +14,4 @@ if [ $EXA_WHICH != 'exa not found' ]; then
   alias la="exa -lias=name"
   alias lt="exa -TFlL=2"
 fi
+
