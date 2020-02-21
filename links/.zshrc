@@ -44,7 +44,7 @@ source ~/.zsh_theme
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git osx brew docker textmate zsh-history-substring-search lol vscode virtualenv zsh-autosuggestions)
+plugins=(git osx brew docker textmate history-substring-search lol vscode virtualenv zsh-autosuggestions)
 
 unsetopt AUTO_CD
 
@@ -64,3 +64,5 @@ source ~/.zsh_aliases
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 test -e "${HOME}/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" && source "${HOME}/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

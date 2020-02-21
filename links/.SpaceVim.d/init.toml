@@ -37,3 +37,6 @@ default_height = 30
 
 [[layers]]
 name = "coloscheme"
+
+[[layers]]
+name = "lang#python"
