@@ -5,5 +5,5 @@
 brew update
 brew upgrade
 
-brew install git zsh bat exa vim fish htop rsync
-
+#brew install git zsh bat exa vim fish htop esync
+brew bundle
