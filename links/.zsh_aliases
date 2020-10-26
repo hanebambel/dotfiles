@@ -10,9 +10,9 @@ alias lsd="ls -lisa | lolcat"
 EXA_WHICH=$(which exa)  
 if [ $EXA_WHICH != 'exa not found' ]; then
   unalias ll
-  alias ll="exa -l"
+  alias ll="exa -lhg"
   unalias la
-  alias la="exa -lias=name"
+  alias la="exa -lhgias=name"
   alias lt="exa -TFlL=2"
 fi
 
