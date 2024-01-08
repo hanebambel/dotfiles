@@ -66,3 +66,8 @@ test -e "${HOME}/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlight
 
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+complete -o nospace -C /usr/local/bin/terraform terraform
+
+source /Users/jangabor/.config/broot/launcher/bash/br
+export PATH="/usr/local/opt/openjdk/bin:$PATH"
