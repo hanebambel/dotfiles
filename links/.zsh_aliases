@@ -2,17 +2,13 @@ alias zshconfig="mate ~/.zshrc"
 alias ohmyzsh="mate ~/.oh-my-zsh"
 alias ddv="sudo dcfldd" #dd mit statusausgabe
 alias getmyip="curl ifconfig.me"
-alias cleandocker="docker ps --filter "status=exited" | awk '{print $1}' | xargs docker rm"
-#alias lsd="ls -lisa | lolcat"
+alias cleandocker="docker ps -aq --filter status=exited | xargs docker rm"
 
-#if exa installed, set aliases
-
-LSD_WHICH=$(which lsd)  
-if [ $LSD_WHICH != 'lsd not found' ]; then
+# if lsd installed, set aliases
+if command -v lsd &>/dev/null; then
   unalias ll
   alias ll="lsd -lhg"
   unalias la
   alias la="lsd -lhia"
   alias lg="lsd -lhig"
 fi
-
