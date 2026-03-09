@@ -36,7 +36,7 @@ default_position = 'top'
 default_height = 30
 
 [[layers]]
-name = "coloscheme"
+name = "colorscheme"
 
 [[layers]]
 name = "lang#python"

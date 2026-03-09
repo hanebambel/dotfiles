@@ -5,41 +5,38 @@ BASE_NAME=~/jg_dotfiles/links
 
 BACKUP_DIR=~/jg_dotfiles/backup_originals
 
-echo "Createing symlinks for config files"
+echo "Creating symlinks for config files"
 echo "Proceed? (y/n)"
-read resp
-if [ "$resp" = 'y' -o "$resp" = 'Y' ] ; then
+read -r resp
+if [[ "$resp" = [yY] ]]; then
 
-  for file in "$BASE_NAME"/.*
+  for file in "$BASE_NAME"/.[!.]*
   do
-    # handle files
+    # handle files and directories
     if [[ -f "$file" ]] || [[ -d "$file" ]]; then
-      file_name=$(basename $file)
-      #echo $file_name
+      file_name=$(basename "$file")
 
-      if [[ ! -e $BACKUP_DIR ]]; then
+      if [[ ! -e "$BACKUP_DIR" ]]; then
         echo "creating backup folder..."
-        mkdir $BACKUP_DIR
+        mkdir "$BACKUP_DIR"
       fi
-      
-      # If original still exists, backup it..
+
+      # If original still exists, back it up
       if [[ ! ~/"$file_name" -ef "$file" ]]; then
         echo "backing up $file_name.."
-        mv ~/"$file_name" $BACKUP_DIR 
-      fi 
+        mv ~/"$file_name" "$BACKUP_DIR"
+      fi
 
       # Create symlink
       if [[ -L ~/"$file_name" ]]; then
         echo "$file_name already linked, skipping.."
       else
-        #echo "linking $file_name"
-        ln -sv $file ~
+        ln -sv "$file" ~
       fi # test for link
     fi # test for file or dir
   done
   echo "Done!"
 else
   echo "Symlinking cancelled by user"
-	return 1
+  exit 1
 fi
-

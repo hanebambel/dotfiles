@@ -8,13 +8,6 @@ ZSH=$HOME/.oh-my-zsh
 #ZSH_THEME="agnoster-jan"
 source ~/.zsh_theme
 
-# Example aliases
-#alias zshconfig="mate ~/.zshrc"
-#alias ohmyzsh="mate ~/.oh-my-zsh"
-#alias ddv="sudo dcfldd" #dd mit statusausgabe
-#[ -f ".zsh_aliases" ] && source ".zsh_aliases"
-#source ~/.zsh_aliases
-
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
 
@@ -44,20 +37,20 @@ source ~/.zsh_theme
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git osx brew docker textmate history-substring-search lol vscode virtualenv zsh-autosuggestions)
+plugins=(git macos brew docker textmate history-substring-search lol vscode virtualenv zsh-autosuggestions)
 
 unsetopt AUTO_CD
 
 #load local overrides
 test -e ~/.zshrc_local && source ~/.zshrc_local
 
-source $ZSH/oh-my-zsh.sh
+source "$ZSH/oh-my-zsh.sh"
 
 autoload -U +X bashcompinit && bashcompinit
 test -e /usr/local/etc/bash_completion.d/az && source /usr/local/etc/bash_completion.d/az
 
 # Customize to your needs...
-export PATH=$PATH:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin
+export PATH="$PATH:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin"
 
 source ~/.zsh_aliases
 
@@ -69,5 +62,5 @@ test -e "${HOME}/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlight
 
 complete -o nospace -C /usr/local/bin/terraform terraform
 
-source /Users/jangabor/.config/broot/launcher/bash/br
+test -e "$HOME/.config/broot/launcher/bash/br" && source "$HOME/.config/broot/launcher/bash/br"
 export PATH="/usr/local/opt/openjdk/bin:$PATH"
