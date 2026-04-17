@@ -1,9 +1,8 @@
 #!/bin/zsh
 
-# change basename if path differs
-BASE_NAME=~/jg_dotfiles/links
-
-BACKUP_DIR=~/jg_dotfiles/backup_originals
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/jg_dotfiles}"
+BASE_NAME="$DOTFILES_DIR/links"
+BACKUP_DIR="$DOTFILES_DIR/backup_originals"
 
 echo "Creating symlinks for config files"
 echo "Proceed? (y/n)"

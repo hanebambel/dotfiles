@@ -58,7 +58,7 @@ test -e /usr/local/etc/bash_completion.d/az && source /usr/local/etc/bash_comple
 
 # Customize to your needs...
 export PATH="$PATH:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin"
-export PATH="$PATH:/Users/jgabor/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+export PATH="$PATH:$HOME/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
 source ~/.zsh_aliases
 
@@ -68,18 +68,27 @@ test -e "${HOME}/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlight
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-complete -o nospace -C /usr/local/bin/terraform terraform
+command -v terraform &>/dev/null && complete -o nospace -C "$(command -v terraform)" terraform
 
 test -e "$HOME/.config/broot/launcher/bash/br" && source "$HOME/.config/broot/launcher/bash/br"
-export PATH="/usr/local/opt/openjdk/bin:$PATH"
+# Java (only if installed)
+if [ -d "$HOME/.local/opt/openjdk@17" ]; then
+  export PATH="$HOME/.local/opt/openjdk@17/bin:$PATH"
+  export JAVA_HOME="$HOME/.local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home"
+elif [ -d "/usr/local/opt/openjdk" ]; then
+  export PATH="/usr/local/opt/openjdk/bin:$PATH"
+fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-export PATH="/Users/jgabor/.local/opt/openjdk@17/bin:$PATH"
-export JAVA_HOME="/Users/jgabor/.local/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home"
 
+# NVM (only if installed)
 export NVM_DIR="$HOME/.nvm"
-[ -s "/Users/jgabor/.local/opt/nvm/nvm.sh" ] && \. "/Users/jgabor/.local/opt/nvm/nvm.sh"
-[ -s "/Users/jgabor/.local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/Users/jgabor/.local/opt/nvm/etc/bash_completion.d/nvm"
+if [ -s "$HOME/.local/opt/nvm/nvm.sh" ]; then
+  \. "$HOME/.local/opt/nvm/nvm.sh"
+  [ -s "$HOME/.local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "$HOME/.local/opt/nvm/etc/bash_completion.d/nvm"
+fi
 
-export PATH="/Users/jgabor/jg_dotfiles/scripts:$PATH"
+# Dotfiles scripts
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/jg_dotfiles}"
+export PATH="$DOTFILES_DIR/scripts:$PATH"
