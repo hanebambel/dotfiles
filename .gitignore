@@ -1,2 +1,4 @@
 backup_originals/**
 .DS_Store
+.zshrc_local
+.anthropic_foundry_api_key

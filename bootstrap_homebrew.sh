@@ -1,4 +1,6 @@
 #!/bin/zsh
+source "$(dirname "$0")/lib/common.sh"
+load_config
 
 BREW_SUDOLESS_DIR="$HOME/.local/Homebrew"
 BREW_SUDOLESS_BIN="$HOME/.local/Homebrew/bin/brew"
@@ -7,11 +9,14 @@ BREW_STANDARD_BIN_X86="/usr/local/bin/brew"
 ZSHRC_LOCAL="$HOME/.zshrc_local"
 BREWFILE="$(dirname "$0")/Brewfile"
 
-# ── helpers ──────────────────────────────────────────────────────────────────
-
-step()  { echo "\n==> $*"; }
-info()  { echo "    $*"; }
-warn()  { echo "    [!] $*"; }
+DEPRECATED_TAPS=(
+    homebrew/cask-fonts
+    homebrew/cask-versions
+    homebrew/command-not-found
+    homebrew/bundle
+    homebrew/services
+    nejckorasa/tap
+)
 
 # ── idempotency: skip install if brew already exists ─────────────────────────
 
@@ -48,8 +53,11 @@ if [[ -z "$BREW_BIN" ]]; then
     case "$CHOICE" in
         1)
             step "Running standard Homebrew installer..."
-            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-            # Determine which standard bin was created
+            if [[ "$DEFAULT_MODE" == 1 ]]; then
+                NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            else
+                /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            fi
             if [[ -x "$BREW_STANDARD_BIN_ARM" ]]; then
                 BREW_BIN="$BREW_STANDARD_BIN_ARM"
             else
@@ -59,54 +67,67 @@ if [[ -z "$BREW_BIN" ]]; then
         2)
             step "Installing Homebrew to ~/.local/Homebrew (no sudo)..."
             mkdir -p "$BREW_SUDOLESS_DIR"
-            curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C "$BREW_SUDOLESS_DIR"
+            curl -L https://github.com/Homebrew/brew/tarball/main | tar xz --strip-components 1 -C "$BREW_SUDOLESS_DIR"
             mkdir -p "$HOME/.local/bin"
             ln -sf "$BREW_SUDOLESS_BIN" "$HOME/.local/bin/brew"
             BREW_BIN="$BREW_SUDOLESS_BIN"
-            SUDOLESS=1
             ;;
         *)
-            echo "Invalid choice. Exiting."
-            exit 1
+            die "Invalid choice."
             ;;
     esac
 fi
 
 # ── PATH configuration for sudoless install ───────────────────────────────────
 
-if [[ -n "$SUDOLESS" ]]; then
-    # Also detect if we landed here from the idempotency check on a sudoless install
-    [[ "$BREW_BIN" == "$BREW_SUDOLESS_BIN" ]] && SUDOLESS=1
-fi
-
 if [[ "$BREW_BIN" == "$BREW_SUDOLESS_BIN" ]]; then
-    # Configure current shell session immediately
     export HOMEBREW_PREFIX="$HOME/.local"
     export HOMEBREW_CELLAR="$HOME/.local/Cellar"
     export HOMEBREW_REPOSITORY="$HOME/.local/Homebrew"
     export PATH="$HOME/.local/bin:$HOME/.local/sbin${PATH+:$PATH}"
 
-    # Set cask appdir for current session
     mkdir -p "$HOME/Applications"
     export HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications"
 
-    # Persist to ~/.zshrc_local (guarded against duplicate writes)
-    if ! grep -q 'HOMEBREW_PREFIX' "$ZSHRC_LOCAL" 2>/dev/null; then
-        step "Adding Homebrew config to $ZSHRC_LOCAL..."
-        cat >> "$ZSHRC_LOCAL" <<'EOF'
+    # Persist to ~/.zshrc_local, rewriting any prior block in place.
+    BEGIN_MARK='# >>> homebrew sudoless >>>'
+    END_MARK='# <<< homebrew sudoless <<<'
 
-# Homebrew sudoless install (added by bootstrap_homebrew.sh)
-export HOMEBREW_PREFIX="$HOME/.local"
-export HOMEBREW_CELLAR="$HOME/.local/Cellar"
-export HOMEBREW_REPOSITORY="$HOME/.local/Homebrew"
-export PATH="$HOME/.local/bin:$HOME/.local/sbin${PATH+:$PATH}"
-export HOMEBREW_CASK_OPTS="--appdir=$HOME/Applications"
-EOF
-        info "Written. Run: source $ZSHRC_LOCAL  (or open a new terminal)"
+    if [[ -f "$ZSHRC_LOCAL" ]] && grep -qF "$BEGIN_MARK" "$ZSHRC_LOCAL"; then
+        step "Rewriting Homebrew sudoless block in $ZSHRC_LOCAL..."
+        # awk-based in-place rewrite: drop lines between markers (inclusive), append fresh block.
+        awk -v b="$BEGIN_MARK" -v e="$END_MARK" '
+            $0 == b {skip=1; next}
+            $0 == e {skip=0; next}
+            !skip {print}
+        ' "$ZSHRC_LOCAL" > "$ZSHRC_LOCAL.tmp" && mv "$ZSHRC_LOCAL.tmp" "$ZSHRC_LOCAL"
     else
-        info "Config block already present in $ZSHRC_LOCAL, skipping."
+        step "Adding Homebrew sudoless block to $ZSHRC_LOCAL..."
     fi
+
+    cat >> "$ZSHRC_LOCAL" <<EOF
+
+$BEGIN_MARK
+export HOMEBREW_PREFIX="\$HOME/.local"
+export HOMEBREW_CELLAR="\$HOME/.local/Cellar"
+export HOMEBREW_REPOSITORY="\$HOME/.local/Homebrew"
+export PATH="\$HOME/.local/bin:\$HOME/.local/sbin\${PATH+:\$PATH}"
+export HOMEBREW_CASK_OPTS="--appdir=\$HOME/Applications"
+$END_MARK
+EOF
+    info "Written. Run: source $ZSHRC_LOCAL  (or open a new terminal)"
 fi
+
+# ── untap deprecated official taps (Homebrew 4.3.0/4.5.0 cleanup) ────────────
+
+step "Checking for deprecated taps..."
+TAPPED="$("$BREW_BIN" tap 2>/dev/null)"
+for tap in "${DEPRECATED_TAPS[@]}"; do
+    if grep -qx "$tap" <<< "$TAPPED"; then
+        info "Untapping deprecated $tap"
+        "$BREW_BIN" untap "$tap" 2>/dev/null || warn "untap $tap failed"
+    fi
+done
 
 # ── post-install ──────────────────────────────────────────────────────────────
 

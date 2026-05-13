@@ -1,41 +1,49 @@
 #!/bin/zsh
+source "$(dirname "$0")/lib/common.sh"
+load_config
 
-DOTFILES_DIR="${DOTFILES_DIR:-$HOME/jg_dotfiles}"
 BASE_NAME="$DOTFILES_DIR/links"
 BACKUP_DIR="$DOTFILES_DIR/backup_originals"
+
+FORCE=0
+[[ "$1" == "--force" ]] && FORCE=1
 
 echo "Creating symlinks for config files"
 echo "Proceed? (y/n)"
 read -r resp
-if [[ "$resp" = [yY] ]]; then
+[[ "$resp" != [yY] ]] && { echo "Symlinking cancelled by user"; exit 1; }
 
-  for file in "$BASE_NAME"/.[!.]*
-  do
-    # handle files and directories
-    if [[ -f "$file" ]] || [[ -d "$file" ]]; then
-      file_name=$(basename "$file")
+[[ ! -d "$BASE_NAME" ]] && die "No links directory at $BASE_NAME"
 
-      if [[ ! -e "$BACKUP_DIR" ]]; then
-        echo "creating backup folder..."
-        mkdir "$BACKUP_DIR"
-      fi
+shopt -s nullglob 2>/dev/null || setopt NULL_GLOB
 
-      # If original still exists, back it up
-      if [[ ! ~/"$file_name" -ef "$file" ]]; then
-        echo "backing up $file_name.."
-        mv ~/"$file_name" "$BACKUP_DIR"
-      fi
+for file in "$BASE_NAME"/.[!.]*; do
+    [[ -f "$file" || -d "$file" ]] || continue
+    file_name="$(basename "$file")"
+    target="$HOME/$file_name"
 
-      # Create symlink
-      if [[ -L ~/"$file_name" ]]; then
-        echo "$file_name already linked, skipping.."
-      else
-        ln -sv "$file" ~
-      fi # test for link
-    fi # test for file or dir
-  done
-  echo "Done!"
-else
-  echo "Symlinking cancelled by user"
-  exit 1
-fi
+    # Back up only a real (non-symlink) original that isn't already our source.
+    if [[ -e "$target" && ! -L "$target" && ! "$target" -ef "$file" ]]; then
+        mkdir -p "$BACKUP_DIR"
+        info "Backing up $file_name"
+        mv "$target" "$BACKUP_DIR/" || warn "backup of $file_name failed"
+    fi
+
+    if [[ -L "$target" ]]; then
+        if [[ "$target" -ef "$file" ]]; then
+            info "$file_name already linked, skipping."
+            continue
+        fi
+        if (( FORCE )); then
+            info "Repointing $file_name (was: $(readlink "$target"))"
+            rm "$target"
+        else
+            warn "$file_name is a symlink to a different target; use --force to repoint."
+            continue
+        fi
+    fi
+
+    ln -sv "$file" "$target"
+done
+
+echo "Done!"

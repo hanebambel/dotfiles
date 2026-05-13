@@ -7,6 +7,14 @@ Prerequisites:
 
     zsh -c "$(curl -fsSL https://raw.githubusercontent.com/hanebambel/dotfiles/master/bootstrap_zsh.sh)"
 
+## Updating an existing install
+
+Once installed, pull the latest changes and re-run everything idempotently:
+
+    zsh ~/jg_dotfiles/update.sh
+
+This pulls the repo, refreshes oh-my-zsh + plugins, re-links any new dotfiles, and runs `brew update && brew upgrade && brew bundle`. Safe to run any time.
+
 ## Customization
 
 ### For forked repos
@@ -18,14 +26,30 @@ Prerequisites:
 
 ### Environment variable overrides
 
-All scripts respect these environment variables (with defaults shown):
+`config.sh` is sourced by all bootstrap, update, and activate scripts. Edit it directly, or export overrides in your shell before running:
 
 | Variable | Default | Used by |
 |---|---|---|
 | `DOTFILES_DIR` | `~/jg_dotfiles` | All scripts |
 | `DOTFILES_REPO` | `https://github.com/hanebambel/dotfiles.git` | `bootstrap_zsh.sh` |
-| `FOUNDRY_KEY_FILE` | `~/.anthropic_foundry_api_key` | `scripts/activate_ifmllm.sh` |
-| `ANTHROPIC_FOUNDRY_BASE_URL` | `https://llm.infomotion.de` | `scripts/activate_ifmllm.sh` |
+
+### Anthropic Foundry (manual activation)
+
+`scripts/activate_ifmllm.sh` is a standalone script -- it doesn't read `config.sh` and isn't part of the bootstrap pipeline. Source it on demand to set the Foundry env vars:
+
+    source ~/jg_dotfiles/scripts/activate_ifmllm.sh
+
+It honours these env overrides (with defaults shown):
+
+| Variable | Default |
+|---|---|
+| `FOUNDRY_KEY_FILE` | `~/.anthropic_foundry_api_key` |
+| `ANTHROPIC_FOUNDRY_BASE_URL` | `https://llm.infomotion.de` |
+| `ANTHROPIC_DEFAULT_OPUS_MODEL` | `azure_ai/claude-opus-4-7[1m]` |
+| `ANTHROPIC_DEFAULT_SONNET_MODEL` | `azure_ai/claude-sonnet-4-6[1m]` |
+| `ANTHROPIC_DEFAULT_HAIKU_MODEL` | `azure_ai/claude-haiku-4-5` |
+
+To unset everything: `source ~/jg_dotfiles/scripts/deactivate_ifmllm.sh`.
 
 Example: install to a custom directory:
 
@@ -33,21 +57,21 @@ Example: install to a custom directory:
 
 ### Local overrides
 
-Machine-specific shell config can be put into `~/.zshrc_local` -- it is sourced automatically and not tracked by git.
+Machine-specific shell config can be put into `~/.zshrc_local` -- it is sourced automatically and not tracked by git. Good place for things you want on one notebook but not another (e.g. Java's `PATH`/`JAVA_HOME`, work-specific aliases, machine-local env vars).
 
 ### Optional tools
 
 The `.zshrc` conditionally loads these tools only if they are installed:
-* Java (OpenJDK 17 via Homebrew)
-* NVM (Node Version Manager)
+* NVM (Node Version Manager, via Homebrew)
 * Terraform autocomplete
 * iTerm2 shell integration
 * FZF
 * Broot
+* Azure CLI completion
 
 ### Homebrew
 
-Run `bootstrap_homebrew.sh` separately. It supports both standard and sudoless installation modes.
+Run `bootstrap_homebrew.sh` separately. It supports both standard and sudoless installation modes, and untaps the deprecated `homebrew/cask-fonts`, `homebrew/cask-versions`, `homebrew/command-not-found`, `homebrew/bundle`, and `homebrew/services` taps on each run.
 
 ## Backup & Rollback
 
