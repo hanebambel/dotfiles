@@ -18,11 +18,10 @@ if [[ ! -s "$FOUNDRY_KEY_FILE" ]]; then
     return 1
 fi
 
-export ANTHROPIC_FOUNDRY_API_KEY="$(<"$FOUNDRY_KEY_FILE")"
-export ANTHROPIC_FOUNDRY_BASE_URL="${ANTHROPIC_FOUNDRY_BASE_URL:-https://llm.infomotion.de}"
-export ANTHROPIC_DEFAULT_OPUS_MODEL="${ANTHROPIC_DEFAULT_OPUS_MODEL:-azure_ai/claude-opus-4-8[1m]}"
-export ANTHROPIC_DEFAULT_SONNET_MODEL="${ANTHROPIC_DEFAULT_SONNET_MODEL:-azure_ai/claude-sonnet-4-6[1m]}"
-export ANTHROPIC_DEFAULT_HAIKU_MODEL="${ANTHROPIC_DEFAULT_HAIKU_MODEL:-azure_ai/claude-haiku-4-5}"
-export CLAUDE_CODE_USE_FOUNDRY="1"
-export CLAUDE_CODE_ENABLE_AUTO_MODE="1"
-
+source activate_ifmllm.sh
+export ANTHROPIC_BASE_URL="${ANTHROPIC_FOUNDRY_BASE_URL}"
+export HEADROOM_EMBEDDER_RUNTIME=pytorch_mps
+export HEADROOM_OUTPUT_SHAPER=1
+headroom proxy --port 8787 --code-graph --memory &
+sleep 2
+export ANTHROPIC_FOUNDRY_BASE_URL="http://127.0.0.1:8787"
