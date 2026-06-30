@@ -22,6 +22,6 @@ source activate_ifmllm.sh
 export ANTHROPIC_BASE_URL="${ANTHROPIC_FOUNDRY_BASE_URL}"
 export HEADROOM_EMBEDDER_RUNTIME=pytorch_mps
 export HEADROOM_OUTPUT_SHAPER=1
-headroom proxy --port 8787 --code-graph --memory &
+headroom proxy --port 8787 --code-graph --memory --code-aware &
 sleep 2
 export ANTHROPIC_FOUNDRY_BASE_URL="http://127.0.0.1:8787"
